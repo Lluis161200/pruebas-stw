@@ -1,0 +1,43 @@
+let PromisedPriorityQueue= function(){
+    this.colaPromesas=[]
+    this.resolveList=[]
+    this.listaPrioritats=[]
+    let contador=0;    
+    this.decorate =(p,priority)=>{
+        this.colaPromesas.push(p)
+        this.listaPrioritats.push(priority)
+        maxPriority = ()=>{
+          let max_prio=0;
+          for(var i=0; i<this.listaPrioritats.length; i++){
+            if(this.listaPrioritats[i]> max_prio){
+            
+                max_prio=this.listaPrioritats[i]
+            }
+          }
+          //se busca la promise con mas prioridad
+          let indexPriority = this.listaPrioritats.indexOf(max_prio)
+          q=this.colaPromesas[indexPriority]
+          //la metemos a la lista de promises a resolver PISTA 1 
+          this.resolveList.push(q)
+          //borramos la prioridad de la lista
+          this.listaPrioritats.splice(indexPriority,1)
+          //devolvemos la promise
+          
+          return q
+        }        
+        return new Promise((resolve,rejects)=>{            
+            
+            contador++;
+            //recursividad PISTA 2
+            q=maxPriority()
+            q.then(console.log)
+            if(contador==this.colaPromesas.length){ 
+              q.then(console.log)
+                this.resolveList.forEach((element)=>{
+                    element.then(console.log)
+                })
+              }
+    
+        })
+    }
+}
